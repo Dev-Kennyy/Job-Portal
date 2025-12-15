@@ -1,10 +1,7 @@
-import SearchBar from "@/components/user/search";
-import React from "react";
-import Jobtype from "@/components/user/jobtype";
-import SalaryRange from "@/components/user/salary";
-import LocationFilter from "@/components/user/location";
+
 import Latestopening from "@/components/user/latestopening";
 import AdminOverview from "@/components/admin/AdminOverview";
+import AllJobs from "@/components/admin/AllJobs";
 
 export default function Page() {
   return (
@@ -12,16 +9,8 @@ export default function Page() {
       <div className="mb-20">
         <AdminOverview />
       </div>
-      {/* FILTERS */}
-      {/* <div className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-12">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Jobtype />
-          <SalaryRange />
-          <LocationFilter />
-        </div>
-      </div> */}
-      <div className="py-5">
-        <Latestopening />
+          <div className="py-5">
+              <AllJobs />
       </div>
     </section>
   );
