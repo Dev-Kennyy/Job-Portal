@@ -32,7 +32,7 @@ export default function RootLayout({
           ${geistMono.variable} 
           antialiased 
           min-h-screen 
-          bg-gradient-to-r 
+          bg-linear-to-r 
           from-[--color-bg-deep] 
           via-[--color-bg-indigo] 
           to-[--color-bg-deep]

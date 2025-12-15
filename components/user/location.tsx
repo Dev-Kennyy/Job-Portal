@@ -43,7 +43,7 @@ export default function LocationDropdown() {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-50 mt-2 w-full rounded-lg border border-white/10 bg-[#050b2e] shadow-xl">
+        <div className="absolute z-50 mt-2 w-full rounded-lg border border-white/10 bg-deep shadow-xl">
           {LOCATIONS.map((location) => (
             <button
               key={location}

@@ -7,13 +7,13 @@ import Latestopening from "@/components/user/latestopening";
 
 export default function Page() {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-[#020617] via-[#050b2e] to-[#0b143f]">
+    <section className="relative min-h-screen bg-linear-to-br from-[#020617] via-deep to-midnight">
       <div className="relative flex min-h-[70vh] items-center justify-center px-4">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.15),transparent_60%)]" />
         <div className="relative w-full max-w-3xl text-center">
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl md:text-6xl">
             Find your next{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
               Tech
             </span>{" "}
             role.

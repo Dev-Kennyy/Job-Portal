@@ -4,7 +4,7 @@ import { FaUserSecret } from "react-icons/fa";
 
 export default function AdminOverview() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-[#020617] via-[#050b2e] to-[#0b143f] px-6 py-16 text-white">
+    <section className="relative overflow-hidden bg-linear-to-r from-[#020617] via-deep to-midnight px-6 py-16 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.15),transparent_60%)]" />
 
       <div className="relative mx-auto max-w-6xl">

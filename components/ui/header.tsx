@@ -8,7 +8,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full border-b border-white/10 bg-gradient-to-r from-[#050B2E] via-[#070F3C] to-[#050B2E] fixed top-0 z-50 backdrop-blur-md">
+    <header className="w-full border-b border-white/10 bg-linear-to-r from-[#050B2E] via-[#070F3C] to-[#050B2E] fixed top-0 z-50 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
