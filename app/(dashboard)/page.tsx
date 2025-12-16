@@ -1,5 +1,4 @@
 import SearchBar from "@/components/user/search";
-import React from "react";
 import Jobtype from "@/components/user/jobtype";
 import SalaryRange from "@/components/user/salary";
 import LocationFilter from "@/components/user/location";

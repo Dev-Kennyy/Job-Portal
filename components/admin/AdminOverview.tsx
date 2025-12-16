@@ -1,8 +1,12 @@
+'use client'
+import { useModalStore } from "@/store/modal-store";
 import { BiBriefcase } from "react-icons/bi";
 import { CgLock } from "react-icons/cg";
 import { FaUserSecret } from "react-icons/fa";
 
 export default function AdminOverview() {
+  const open = useModalStore((state) => state.open);
+
   return (
     <section className="relative overflow-hidden bg-linear-to-r from-[#020617] via-deep to-midnight px-6 py-16 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.15),transparent_60%)]" />
@@ -16,7 +20,7 @@ export default function AdminOverview() {
             </p>
           </div>
 
-          <button className="w-fit rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 cursor-pointer">
+          <button className="w-fit rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 cursor-pointer" onClick={() => open('POST_JOB')} >
             Post New Job
           </button>
         </div>

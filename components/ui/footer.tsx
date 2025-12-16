@@ -48,7 +48,7 @@ export default function Footer() {
             <h4 className="mb-3 text-sm font-semibold text-white">Follow us</h4>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="http://github.com/Dev-Kennyy/"
                 className="rounded-lg border border-white/10 p-2 transition hover:border-blue-500/50 hover:bg-white/5"
               >
                 <FaGithub className="h-5 w-5" />
