@@ -10,7 +10,7 @@ export default function Latestopening() {
         <h2 className="text-xl text-white">Latest Openings</h2>
         <p className="text-primary">Showing 24 Jobs</p>
       </div>
-      <div className=" p-9 flex  flex-wrap gap-9">
+      <div className=" p-9 flex flex-col gap-3">
         {jobs.map((job) => (
           <Link key={job.id} href={`/job/${job.id}`}>
             <JobCard key={job.id} job={job} />
