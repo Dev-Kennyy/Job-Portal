@@ -1,6 +1,7 @@
 import React from "react";
 import JobCard from "./job-card";
 import { jobs } from "@/data/jobs";
+import Link from "next/link";
 
 export default function Latestopening() {
   return (
@@ -11,7 +12,9 @@ export default function Latestopening() {
       </div>
       <div className=" p-9 flex  flex-wrap gap-9">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+          <Link key={job.id} href={`/job/${job.id}`}>
+            <JobCard key={job.id} job={job} />
+          </Link>
         ))}
       </div>
       <p className="text-center text-primary cursor-pointer underline ">

@@ -22,12 +22,9 @@ export default function Page() {
             Join the best teams at world-class companies. Verified listings
             only.
           </p>
-
           <SearchBar />
         </div>
       </div>
-
-      {/* FILTERS */}
       <div className="relative mx-auto w-full max-w-6xl px-4 pb-20">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <Jobtype />
