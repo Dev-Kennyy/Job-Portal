@@ -15,7 +15,11 @@ const typeStyles: Record<Job["type"], { bg: string; text: string }> = {
   },
 };
 
-export default function JobCard({ job }: { job: Job }) {
+type JobCardProps = {
+  job: Job;
+};
+
+export default function JobCard({ job }: JobCardProps) {
   const badge = typeStyles[job.type];
 
   return (
@@ -38,20 +42,20 @@ export default function JobCard({ job }: { job: Job }) {
             {job.type}
           </span>
 
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 cursor-pointer">
+          <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
             Apply
           </button>
         </div>
       </div>
 
-      {/* Tags */}
+      {/* Tech stack */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {job.tags.map((tag) => (
+        {job.techStack.slice(0, 4).map((tech) => (
           <span
-            key={tag}
+            key={tech}
             className="rounded-md bg-white/10 px-2 py-1 text-xs text-slate-300"
           >
-            {tag}
+            {tech}
           </span>
         ))}
       </div>

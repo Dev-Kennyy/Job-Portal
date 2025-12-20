@@ -24,7 +24,7 @@ export default function JobCard({ job }: { job: Job }) {
           </p>
 
           <div className="mt-2 flex flex-wrap gap-2">
-            {job.tags.map((tag) => (
+            {job.techStack.map((tag) => (
               <span
                 key={tag}
                 className="rounded-md bg-black/30 px-2 py-1 text-xs text-slate-300"
