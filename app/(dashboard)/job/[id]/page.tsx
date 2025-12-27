@@ -1,19 +1,50 @@
-import { jobs } from "@/data/jobs";
+"use client";
+
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { getCurrentUser } from "@/services/auth";
+import { getSingleJob } from "@/services/jobs";
 import Link from "next/link";
 
-type PageProps = {
-  params: Promise<{
-    id: string;
-  }>;
+type Job = {
+  _id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  salary: string;
+  tags: string[];
+  description: string;
 };
 
-export default async function Page({ params }: PageProps) {
-  const { id } = await params;
-  const job = jobs.find((j) => j.id === Number(id));
+export default function Page({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (!job) {
-    return <p className="text-center text-white">Job not found</p>;
-  }
+  const [job, setJob] = useState<Job | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function init() {
+      const user = await getCurrentUser();
+
+      // 🔐 Not logged in → save page + redirect
+      if (!user) {
+        sessionStorage.setItem("redirectAfterLogin", pathname);
+        router.replace("/login");
+        return;
+      }
+
+      // ✅ Logged in → fetch job
+      const jobData = await getSingleJob(params.id);
+      setJob(jobData);
+      setLoading(false);
+    }
+
+    init();
+  }, [params.id, pathname, router]);
+
+  if (loading || !job) return null;
 
   return (
     <section className="max-w-5xl mx-auto px-6 py-10 text-white">
@@ -26,7 +57,7 @@ export default async function Page({ params }: PageProps) {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-white/10 pb-8">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-lg bg-white text-black flex items-center justify-center font-bold">
-            {job.companyInitial}
+            {job.company.charAt(0)}
           </div>
 
           <div>
@@ -46,7 +77,7 @@ export default async function Page({ params }: PageProps) {
           <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">
             Share
           </button>
-          <button className="px-5 py-2 rounded-lg bg-primary text-black font-medium">
+          <button className="px-5 py-2 rounded-lg bg-primary text-black font-medium cursor-pointer">
             Apply Now
           </button>
         </div>
@@ -55,41 +86,17 @@ export default async function Page({ params }: PageProps) {
       {/* About */}
       <div className="mt-10 space-y-4">
         <h2 className="text-lg font-semibold">About the role</h2>
-        {job.about.map((text, i) => (
-          <p key={i} className="text-white/70 leading-relaxed">
-            {text}
-          </p>
-        ))}
-      </div>
-
-      {/* Responsibilities */}
-      <div className="mt-10 space-y-4">
-        <h2 className="text-lg font-semibold">Responsibilities</h2>
-        <ul className="space-y-3 text-white/70">
-          {job.responsibilities.map((item, i) => (
-            <li key={i}>✔ {item}</li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Requirements */}
-      <div className="mt-10 space-y-4">
-        <h2 className="text-lg font-semibold">Requirements</h2>
-        <ul className="space-y-3 text-white/70">
-          {job.requirements.map((item, i) => (
-            <li key={i}>• {item}</li>
-          ))}
-        </ul>
+        <p className="text-white/70 leading-relaxed">{job.description}</p>
       </div>
 
       {/* Tech Stack */}
       <div className="mt-10 space-y-4">
         <h2 className="text-lg font-semibold">Tech Stack</h2>
         <div className="flex flex-wrap gap-3">
-          {job.techStack.map((tech) => (
+          {job.tags.map((tech) => (
             <span
               key={tech}
-              className="px-3 py-1 rounded-md bg-white/10 text-sm"
+              className="px-3 py-1 rounded-md bg-white/10 text-sm cursor-pointer"
             >
               {tech}
             </span>

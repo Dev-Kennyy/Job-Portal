@@ -7,7 +7,7 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang="en">
       <body>
         <section className="min-h-screen bg-linear-to-br from-[#020617] via-[#020617] to-[#020617] flex flex-col">
           <Header />

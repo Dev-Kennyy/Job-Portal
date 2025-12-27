@@ -8,7 +8,7 @@ export default function Jobtype() {
       </h3>
 
       <div className="flex flex-wrap gap-3">
-        {["Remote", "Hybrid", "Onsite"].map((type) => (
+        {["Remote", "Hybrid", "Onsite", "Full-Time"].map((type) => (
           <label
             key={type}
             className="

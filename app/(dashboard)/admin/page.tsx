@@ -1,8 +1,13 @@
 import AdminOverview from "@/components/admin/AdminOverview";
 import AllJobs from "@/components/admin/AllJobs";
 import PostJobModal from "@/components/admin/PostJobModal";
+// import { getCurrentUser } from "@/lib/auth";
+// import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  // const user = await getCurrentUser()
+  // if (!user) redirect('/login')
+  // if (user.role !== "admin") redirect('/dashboard')
   return (
     <section className="relative min-h-screen bg-linear-to-br from-[#020617] via-deep to-midnight">
       <PostJobModal />

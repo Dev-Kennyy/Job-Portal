@@ -1,4 +1,4 @@
-import { Job } from "@/data/jobs";
+import { Job } from "@/lib/jobs";
 
 const typeStyles: Record<Job["type"], { bg: string; text: string }> = {
   Remote: {
@@ -10,6 +10,10 @@ const typeStyles: Record<Job["type"], { bg: string; text: string }> = {
     text: "text-indigo-400",
   },
   Onsite: {
+    bg: "bg-amber-500/10",
+    text: "text-amber-400",
+  },
+  "Full-time": {
     bg: "bg-amber-500/10",
     text: "text-amber-400",
   },
@@ -50,7 +54,7 @@ export default function JobCard({ job }: JobCardProps) {
 
       {/* Tech stack */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {job.techStack.slice(0, 4).map((tech) => (
+        {job.tags.slice(0, 4).map((tech) => (
           <span
             key={tech}
             className="rounded-md bg-white/10 px-2 py-1 text-xs text-slate-300"

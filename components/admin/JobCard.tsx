@@ -1,4 +1,4 @@
-import { Job } from "@/data/jobs";
+import { Job } from "@/lib/jobs";
 import { BiPencil } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 
@@ -7,6 +7,7 @@ export default function JobCard({ job }: { job: Job }) {
     Remote: "bg-emerald-500/10 text-emerald-400",
     Hybrid: "bg-amber-500/10 text-amber-400",
     Onsite: "bg-blue-500/10 text-blue-400",
+    "Full-time": "bg-blue-500/10 text-blue-400",
   };
 
   return (
@@ -24,7 +25,7 @@ export default function JobCard({ job }: { job: Job }) {
           </p>
 
           <div className="mt-2 flex flex-wrap gap-2">
-            {job.techStack.map((tag) => (
+            {job.tags.map((tag) => (
               <span
                 key={tag}
                 className="rounded-md bg-black/30 px-2 py-1 text-xs text-slate-300"

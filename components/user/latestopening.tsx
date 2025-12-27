@@ -1,9 +1,11 @@
-import React from "react";
+import { getAllJobs } from "@/services/jobs";
 import JobCard from "./job-card";
-import { jobs } from "@/data/jobs";
 import Link from "next/link";
+import { Job } from "@/lib/jobs";
 
-export default function Latestopening() {
+export default async function Latestopening() {
+  const allJobs = await getAllJobs();
+  console.log(allJobs);
   return (
     <div>
       <div className="flex justify-between px-6 py-6 items-center">
@@ -11,9 +13,9 @@ export default function Latestopening() {
         <p className="text-primary">Showing 24 Jobs</p>
       </div>
       <div className=" p-9 flex flex-col gap-3">
-        {jobs.map((job) => (
-          <Link key={job.id} href={`/job/${job.id}`}>
-            <JobCard key={job.id} job={job} />
+        {allJobs.data.map((job: Job) => (
+          <Link key={job._id} href={`/job/${job._id}`}>
+            <JobCard key={job._id} job={job} />
           </Link>
         ))}
       </div>
