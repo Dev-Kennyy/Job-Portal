@@ -1,22 +1,59 @@
-// import { jobs } from "@/data/jobs";
+"use client";
+
+import { useEffect, useState } from "react";
 import { getAllJobs } from "@/services/jobs";
 import JobCard from "./JobCard";
 import { Job } from "@/lib/jobs";
+import { FaSpinner } from "react-icons/fa";
 
-export default async function AllJobs() {
-  const jobs = await getAllJobs();
+export default function AllJobs() {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchJobs() {
+      try {
+        const data = await getAllJobs();
+        setJobs(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch jobs:", error);
+        setJobs([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchJobs();
+  }, []);
+
+  // ✅ THIS IS THE KEY PART
+  function handleDeleteJob(id: string) {
+    setJobs((prevJobs) => prevJobs.filter((job) => job._id !== id));
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center text-white">
+        <FaSpinner className="h-8 w-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
   return (
     <div className="text-white">
       <div className="flex justify-between items-center px-9">
         <h1 className="text-3xl">All Jobs</h1>
-        <p className="text-primary ">Showing {jobs.data.length} Jobs</p>
+        <p className="text-primary">Showing {jobs.length} Jobs</p>
       </div>
-      <div>
-        <div className="space-y-4 px-9 pt-5">
-          {jobs.data.map((job: Job) => (
-            <JobCard key={job._id} job={job} />
-          ))}
-        </div>
+
+      <div className="space-y-4 px-9 pt-5">
+        {jobs.map((job) => (
+          <JobCard
+            key={job._id}
+            job={job}
+            onDelete={handleDeleteJob} // ✅ pass handler
+          />
+        ))}
       </div>
     </div>
   );

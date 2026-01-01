@@ -4,8 +4,13 @@ import { JobFormState } from "@/lib/jobs";
 import { postJob } from "@/services/jobs";
 import { useModalStore } from "@/store/modal-store";
 import React from "react";
+import toast from "react-hot-toast";
 
-export default function PostJobModal() {
+interface PostJobModalProps {
+  onJobPosted?: () => void;
+}
+
+export default function PostJobModal({ onJobPosted }: PostJobModalProps) {
   const { isOpen, type, close } = useModalStore();
 
   const [loading, setLoading] = React.useState(false);
@@ -39,9 +44,35 @@ export default function PostJobModal() {
       setLoading(true);
       setError(null);
       await postJob(jobDetails);
+      
+      // Show success toast
+      toast.success("Job posted successfully!", {
+        icon: "✅",
+      });
+      
+      // Reset form
+      setJobDetails({
+        title: "",
+        company: "",
+        location: "",
+        type: "Remote",
+        salaryMin: "",
+        salaryMax: "",
+        salaryPeriod: "Year",
+        tags: "",
+        description: "",
+      });
+      
+      // Close modal
       close();
+      
+      // Trigger refresh of jobs list
+      if (onJobPosted) {
+        onJobPosted();
+      }
     } catch (err) {
       setError("Failed to publish job. Please try again.");
+      toast.error("Failed to publish job. Please try again.");
     } finally {
       setLoading(false);
     }

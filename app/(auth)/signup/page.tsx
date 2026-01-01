@@ -1,9 +1,12 @@
 "use client";
 
 import { registerUser } from "@/services/auth";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function Page() {
+    const router = useRouter();
+  
   const [registerInfo, setRegisterInfo] = React.useState({
     firstName: "",
     lastName: "",
@@ -43,9 +46,10 @@ export default function Page() {
     console.log("Register info:", registerInfo);
     registerUser(registerInfo).finally(() => {
       setIsLoading(false);
+      router.push('/')
+      //
     });
   };
-
 
   return (
     <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-8 text-white shadow-xl mt-30">
@@ -54,14 +58,14 @@ export default function Page() {
         Start your 30-day free trial. No credit card required.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      {/* <div className="mt-6 grid grid-cols-2 gap-3">
         <button className="flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/15 py-2.5 text-sm transition">
           GitHub
         </button>
         <button className="flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/15 py-2.5 text-sm transition">
           Google
         </button>
-      </div>
+      </div> */}
 
       <div className="my-6 flex items-center gap-3 text-xs text-slate-400">
         <div className="h-px flex-1 bg-white/10" />
@@ -135,7 +139,7 @@ export default function Page() {
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-black hover:bg-slate-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="cursor-pointer mt-2 w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-black hover:bg-slate-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Creating account..." : "Create account"}
         </button>

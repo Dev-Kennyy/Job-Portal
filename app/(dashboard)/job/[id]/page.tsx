@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/services/auth";
 import { getSingleJob } from "@/services/jobs";
 import Link from "next/link";
+import { FaSpinner } from "react-icons/fa";
 
 type Job = {
   _id: string;
@@ -17,7 +18,9 @@ type Job = {
   description: string;
 };
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params); // ✅ unwrap params
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -28,23 +31,27 @@ export default function Page({ params }: { params: { id: string } }) {
     async function init() {
       const user = await getCurrentUser();
 
-      // 🔐 Not logged in → save page + redirect
       if (!user) {
         sessionStorage.setItem("redirectAfterLogin", pathname);
         router.replace("/login");
         return;
       }
 
-      // ✅ Logged in → fetch job
-      const jobData = await getSingleJob(params.id);
+      const jobData = await getSingleJob(id);
       setJob(jobData);
       setLoading(false);
     }
 
     init();
-  }, [params.id, pathname, router]);
+  }, [id, pathname, router]);
 
-  if (loading || !job) return null;
+  if (loading || !job) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <FaSpinner className="h-12 w-12 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <section className="max-w-5xl mx-auto px-6 py-10 text-white">
@@ -67,7 +74,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <span>•</span>
               <span>{job.location}</span>
               <span className="px-2 py-0.5 rounded-md bg-white/10 text-primary">
-                {job.salary}
+                {job.type}
               </span>
             </div>
           </div>
@@ -77,31 +84,52 @@ export default function Page({ params }: { params: { id: string } }) {
           <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">
             Share
           </button>
-          <button className="px-5 py-2 rounded-lg bg-primary text-black font-medium cursor-pointer">
+          <button className="cursor-pointer px-5 py-2 rounded-lg bg-primary text-black font-medium">
             Apply Now
           </button>
         </div>
       </div>
 
-      {/* About */}
-      <div className="mt-10 space-y-4">
-        <h2 className="text-lg font-semibold">About the role</h2>
-        <p className="text-white/70 leading-relaxed">{job.description}</p>
-      </div>
+      {/* Job Details */}
+      <div className="mt-10 pt-7">
+        <div className="md:col-span-2 space-y-6">
+          <div>
+            <h2 className="text-lg font-semibold">About the role</h2>
+            <p className="text-white/70">{job.description}</p>
+          </div>
 
-      {/* Tech Stack */}
-      <div className="mt-10 space-y-4">
-        <h2 className="text-lg font-semibold">Tech Stack</h2>
-        <div className="flex flex-wrap gap-3">
-          {job.tags.map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1 rounded-md bg-white/10 text-sm cursor-pointer"
-            >
-              {tech}
-            </span>
-          ))}
+          <div>
+            <h2 className="text-lg font-semibold">Tech Stack</h2>
+            <div className="flex flex-wrap gap-3 pt-3">
+              {job.tags.map((tech) => (
+                <span
+                  key={tech}
+                  className="px-3 py-1 rounded-md bg-white/10 text-sm"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
+
+        <aside className="rounded-xl border border-white/10 bg-white/5  mt-9 p-5 h-fit">
+          <h3 className="font-semibold text-lg mb-3">Job Details</h3>
+          <div className="text-sm text-white/70 space-y-5">
+            <p>
+              <span className="text-white">Company:</span> {job.company}
+            </p>
+            <p>
+              <span className="text-white">Location:</span> {job.location}
+            </p>
+            <p>
+              <span className="text-white">Job Type:</span> {job.type}
+            </p>
+            <p>
+              <span className="text-white">Salary:</span> {job.salary}
+            </p>
+          </div>
+        </aside>
       </div>
     </section>
   );

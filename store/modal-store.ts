@@ -1,17 +1,20 @@
 import { create } from "zustand";
+import { Job } from "@/lib/jobs";
 
-type ModalType = "POST_JOB" | null;
+type ModalType = "POST_JOB" | "EDIT_SALARY" | null;
 
 interface ModalState {
   isOpen: boolean;
   type: ModalType;
-  open: (type: ModalType) => void;
+  data: Job | null;
+  open: (type: ModalType, data?: Job | null) => void;
   close: () => void;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
   isOpen: false,
   type: null,
-  open: (type) => set({ isOpen: true, type }),
-  close: () => set({ isOpen: false, type: null }),
+  data: null,
+  open: (type, data = null) => set({ isOpen: true, type, data }),
+  close: () => set({ isOpen: false, type: null, data: null }),
 }));

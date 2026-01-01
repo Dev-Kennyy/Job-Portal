@@ -30,7 +30,7 @@ export async function loginUser(loginInfo: {
   // ✅ SAVE JWT
   sessionStorage.setItem("accessToken", data.accessToken);
 
-  console.log("Login successful");
+  console.log(data);
 
   return data;
 }

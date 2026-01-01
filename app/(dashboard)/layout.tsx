@@ -28,7 +28,10 @@ export default function RootLayout({
       >
         <Header />
 
-        <main className="flex-1 pt-16 bg-linear-to-br from-[#020617] via-deep to-midnight">
+        <main className="relative flex-1 pt-16 ">
+          {/* background */}
+          <div className="absolute inset-0 -z-10 pointer-events-none bg-linear-to-br from-[#020617] via-deep to-midnight" />
+
           {children}
         </main>
 

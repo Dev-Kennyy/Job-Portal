@@ -1,14 +1,33 @@
+"use client";
+
 import { Job } from "@/lib/jobs";
+import { deleteJob } from "@/services/jobs";
+import { useModalStore } from "@/store/modal-store";
 import { BiPencil } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 
-export default function JobCard({ job }: { job: Job }) {
-  const typeStyles = {
+type JobCardProps = {
+  job: Job;
+  onDelete: (id: string) => void;
+};
+
+export default function JobCard({ job, onDelete }: JobCardProps) {
+  const { open } = useModalStore();
+  const typeStyles: Record<string, string> = {
     Remote: "bg-emerald-500/10 text-emerald-400",
     Hybrid: "bg-amber-500/10 text-amber-400",
     Onsite: "bg-blue-500/10 text-blue-400",
     "Full-time": "bg-blue-500/10 text-blue-400",
   };
+
+  async function handleDelete() {
+    try {
+      await deleteJob(job._id);
+      onDelete(job._id); // ✅ instant UI update
+    } catch (error) {
+      console.error("Failed to delete job:", error);
+    }
+  }
 
   return (
     <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-5 text-white transition hover:border-blue-500/40 hover:bg-white/10">
@@ -47,11 +66,17 @@ export default function JobCard({ job }: { job: Job }) {
           {job.type}
         </span>
 
-        <button className="text-slate-400 transition hover:text-blue-400 cursor-pointer">
+        <button
+          onClick={() => open("EDIT_SALARY", job)}
+          className="text-slate-400 transition hover:text-blue-400 cursor-pointer"
+        >
           <BiPencil size={16} />
         </button>
 
-        <button className="text-slate-400 transition hover:text-red-400 cursor-pointer">
+        <button
+          onClick={handleDelete}
+          className="text-slate-400 transition hover:text-red-400 cursor-pointer"
+        >
           <BsTrash2 size={16} />
         </button>
       </div>

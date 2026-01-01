@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
-
   const [loginInfo, setLoginInfo] = React.useState({
     email: "",
     password: "",
@@ -15,23 +14,22 @@ export default function Page() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   async function handleClick(e: React.FormEvent) {
-    e.preventDefault(); // 🔴 THIS WAS MISSING
+    e.preventDefault();
     setIsLoading(true);
 
-    const res = await loginUser(loginInfo);
+    try {
+      const res = await loginUser(loginInfo);
 
-    if (res.ok) {
-      const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+      if (res.accessToken) {
+        const redirectTo = sessionStorage.getItem("redirectAfterLogin") || "/";
 
-      if (redirectPath) {
         sessionStorage.removeItem("redirectAfterLogin");
-        router.replace(redirectPath);
-      } else {
-        router.replace("/dashboard"); // ✅ default
-      }
-    }
 
-    setIsLoading(false);
+        router.replace(redirectTo);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
