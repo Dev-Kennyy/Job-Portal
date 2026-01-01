@@ -44,12 +44,12 @@ export default function PostJobModal({ onJobPosted }: PostJobModalProps) {
       setLoading(true);
       setError(null);
       await postJob(jobDetails);
-      
+
       // Show success toast
       toast.success("Job posted successfully!", {
         icon: "✅",
       });
-      
+
       // Reset form
       setJobDetails({
         title: "",
@@ -62,16 +62,16 @@ export default function PostJobModal({ onJobPosted }: PostJobModalProps) {
         tags: "",
         description: "",
       });
-      
+
       // Close modal
       close();
-      
+
       // Trigger refresh of jobs list
       if (onJobPosted) {
         onJobPosted();
       }
     } catch (err) {
-      setError("Failed to publish job. Please try again.");
+      setError(`${err} : Failed to publish job. Please try again.`);
       toast.error("Failed to publish job. Please try again.");
     } finally {
       setLoading(false);
