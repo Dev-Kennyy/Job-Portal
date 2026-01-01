@@ -85,7 +85,7 @@ export default function PostJobModal({ onJobPosted }: PostJobModalProps) {
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      <div className="relative z-10 w-full max-w-2xl rounded-2xl border border-white/10 bg-[#0b143f] p-8 text-white shadow-xl">
+      <div className="relative z-10 w-full max-w-2xl rounded-2xl border border-white/10 bg-midnight p-8 text-white shadow-xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>

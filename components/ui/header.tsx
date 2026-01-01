@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BiUser } from "react-icons/bi";
-import { FaBell, FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-            <a href="#" className="hover:text-white">
+            {/* <a href="#" className="hover:text-white">
               Jobs
             </a>
             <a href="#" className="hover:text-white">
@@ -32,12 +32,12 @@ export default function Header() {
             </a>
             <a href="#" className="hover:text-white">
               Salaries
-            </a>
+            </a> */}
 
-            <button className="relative">
+            {/* <button className="relative">
               <FaBell className="h-5 w-5" />
               <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-blue-500" />
-            </button>
+            </button> */}
 
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
               <BiUser className="h-4 w-4 text-white cursor-pointer" />
@@ -68,7 +68,7 @@ export default function Header() {
             </div>
 
             {/* Links */}
-            <nav className="flex flex-col gap-4 text-gray-300">
+            {/* <nav className="flex flex-col gap-4 text-gray-300">
               <a href="#" className="hover:text-white">
                 Jobs
               </a>
@@ -78,14 +78,14 @@ export default function Header() {
               <a href="#" className="hover:text-white">
                 Salaries
               </a>
-            </nav>
+            </nav> */}
 
             {/* Icons */}
             <div className="flex items-center gap-4">
-              <button className="relative text-gray-300">
+              {/* <button className="relative text-gray-300">
                 <FaBell className="h-5 w-5" />
                 <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-blue-500" />
-              </button>
+              </button> */}
 
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
                 <BiUser className="h-4 w-4 text-white cursor-pointer" />

@@ -25,14 +25,14 @@ export default function Page() {
           <SearchBar />
         </div>
       </div>
-      <div className="relative mx-auto w-full max-w-6xl px-4 pb-20">
+      <div className="relative mx-auto w-full max-w-6xl px-4">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Jobtype />
-          <SalaryRange />
-          <LocationFilter />
+          {/* <Jobtype /> */}
+          {/* <SalaryRange /> */}
+          {/* <LocationFilter /> */}
         </div>
       </div>
-      <div className="py-5">
+      <div className="py-2">
         <Latestopening />
       </div>
     </section>

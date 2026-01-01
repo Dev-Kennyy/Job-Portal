@@ -9,6 +9,7 @@ import { FaSpinner } from "react-icons/fa";
 export default function AllJobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
     async function fetchJobs() {
@@ -31,6 +32,10 @@ export default function AllJobs() {
     setJobs((prevJobs) => prevJobs.filter((job) => job._id !== id));
   }
 
+  function handleShowMore() {
+    setVisibleCount((prev) => prev + 5);
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-white">
@@ -43,11 +48,13 @@ export default function AllJobs() {
     <div className="text-white">
       <div className="flex justify-between items-center px-9">
         <h1 className="text-3xl">All Jobs</h1>
-        <p className="text-primary">Showing {jobs.length} Jobs</p>
+        <p className="text-primary">
+          Showing {Math.min(visibleCount, jobs.length)} of {jobs.length} Jobs
+        </p>
       </div>
 
       <div className="space-y-4 px-9 pt-5">
-        {jobs.map((job) => (
+        {jobs.slice(0, visibleCount).map((job) => (
           <JobCard
             key={job._id}
             job={job}
@@ -55,6 +62,14 @@ export default function AllJobs() {
           />
         ))}
       </div>
+      {visibleCount < jobs.length && (
+        <p
+          className="text-center text-primary cursor-pointer underline mt-4"
+          onClick={handleShowMore}
+        >
+          Show more
+        </p>
+      )}
     </div>
   );
 }

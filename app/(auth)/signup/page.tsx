@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function Page() {
-    const router = useRouter();
-  
+  const router = useRouter();
+
   const [registerInfo, setRegisterInfo] = React.useState({
     firstName: "",
     lastName: "",
@@ -27,7 +27,7 @@ export default function Page() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -43,12 +43,14 @@ export default function Page() {
 
     // ready to send to backend
     setIsLoading(true);
-    console.log("Register info:", registerInfo);
-    registerUser(registerInfo).finally(() => {
+    try {
+      await registerUser(registerInfo);
+      router.push("/");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Registration failed");
+    } finally {
       setIsLoading(false);
-      router.push('/')
-      //
-    });
+    }
   };
 
   return (
