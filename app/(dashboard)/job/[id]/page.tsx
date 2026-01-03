@@ -3,9 +3,12 @@
 import { useEffect, useState, use } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/services/auth";
-import { getSingleJob } from "@/services/jobs";
+import { getSingleJob, applyJob } from "@/services/jobs";
 import Link from "next/link";
 import { FaSpinner } from "react-icons/fa";
+import toast from "react-hot-toast";
+import SuccessModal from "@/components/ui/SuccessModal";
+import { useApplicationStore } from "@/store/application-store";
 
 type Job = {
   _id: string;
@@ -26,6 +29,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
+  const [applying, setApplying] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const { hasApplied, addAppliedJob } = useApplicationStore();
 
   useEffect(() => {
     async function init() {
@@ -39,11 +46,35 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
       const jobData = await getSingleJob(id);
       setJob(jobData);
+
+      // Check if user has already applied to this job (from local storage)
+      // Note: In a real app, you might want to verify this with the server
       setLoading(false);
     }
 
     init();
   }, [id, pathname, router]);
+
+  const handleApply = async () => {
+    if (!job || hasApplied(job._id)) return;
+
+    setApplying(true);
+    try {
+      await applyJob(job._id);
+      addAppliedJob(job._id); // Mark as applied in local storage
+      setShowSuccessModal(true);
+      toast.success("Application submitted successfully!");
+    } catch (error) {
+      console.error("Failed to apply:", error);
+      toast.error("Failed to apply for job. Please try again.");
+    } finally {
+      setApplying(false);
+    }
+  };
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
 
   if (loading || !job) {
     return (
@@ -84,8 +115,27 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">
             Share
           </button>
-          <button className="cursor-pointer px-5 py-2 rounded-lg bg-primary text-black font-medium">
-            Apply Now
+          <button
+            onClick={handleApply}
+            disabled={applying || hasApplied(job._id)}
+            className={`cursor-pointer px-5 py-2 rounded-lg font-medium transition-colors ${
+              hasApplied(job._id)
+                ? "bg-green-600 text-white cursor-not-allowed"
+                : applying
+                ? "bg-primary/70 text-black cursor-not-allowed"
+                : "bg-primary text-black hover:bg-primary/90"
+            }`}
+          >
+            {applying ? (
+              <div className="flex items-center gap-2">
+                <FaSpinner className="h-4 w-4 animate-spin" />
+                Applying...
+              </div>
+            ) : hasApplied(job._id) ? (
+              "Applied ✓"
+            ) : (
+              "Apply Now"
+            )}
           </button>
         </div>
       </div>
@@ -131,6 +181,13 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
         </aside>
       </div>
+
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={handleCloseSuccessModal}
+        title="Application Submitted!"
+        message="Your application has been successfully submitted. The employer will review your application and get back to you soon."
+      />
     </section>
   );
 }

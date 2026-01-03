@@ -169,3 +169,32 @@ export async function updateJobSalary(
       : "Not disclosed";
   return updateJob(id, { salary });
 }
+
+//? Apply to a job
+export async function applyJob(id: string) {
+  try {
+    if (!baseURL) {
+      throw new Error("API_BASE_URL is not defined");
+    }
+
+    const token = sessionStorage.getItem("accessToken");
+
+    const res = await fetch(`${baseURL}/jobs/${id}/apply`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to apply to job: ${errorText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Apply to job error:", error);
+    throw error;
+  }
+}

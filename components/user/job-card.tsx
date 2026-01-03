@@ -21,9 +21,10 @@ const typeStyles: Record<Job["type"], { bg: string; text: string }> = {
 
 type JobCardProps = {
   job: Job;
+  hasApplied?: boolean;
 };
 
-export default function JobCard({ job }: JobCardProps) {
+export default function JobCard({ job, hasApplied = false }: JobCardProps) {
   const badge = typeStyles[job.type];
 
   return (
@@ -46,8 +47,15 @@ export default function JobCard({ job }: JobCardProps) {
             {job.type}
           </span>
 
-          <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600">
-            Apply
+          <button
+            disabled={hasApplied}
+            className={`rounded-lg px-4 py-2 text-sm font-medium text-white transition ${
+              hasApplied
+                ? "bg-green-600 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
+          >
+            {hasApplied ? "Applied ✓" : "Apply"}
           </button>
         </div>
       </div>

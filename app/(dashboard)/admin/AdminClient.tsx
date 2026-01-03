@@ -42,9 +42,6 @@ export default function AdminClient() {
 
       <div className="py-5">
         <AllJobs key={refreshKey} />
-        <p className="cursor-pointer pt-9 text-center text-primary hover:underline">
-          See all Jobs
-        </p>
       </div>
     </section>
   );

@@ -30,7 +30,23 @@ export default function Page() {
         router.replace(redirectTo);
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Login failed");
+      let errorMessage = "Login failed";
+      if (error instanceof Error) {
+        // Clean up common error messages
+        if (error.message.includes("Invalid credentials")) {
+          errorMessage = "Invalid email or password";
+        } else if (error.message.includes("User not found")) {
+          errorMessage = "Account not found. Please check your email.";
+        } else if (
+          error.message.includes("network") ||
+          error.message.includes("fetch")
+        ) {
+          errorMessage = "Network error. Please check your connection.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +86,14 @@ export default function Page() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && (
+          <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+            <p className="text-sm text-red-400 flex items-center gap-2">
+              <span>⚠️</span>
+              {error}
+            </p>
+          </div>
+        )}
 
         <button
           type="submit"

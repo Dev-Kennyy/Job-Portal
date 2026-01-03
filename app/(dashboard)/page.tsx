@@ -1,10 +1,15 @@
+"use client";
+
 import SearchBar from "@/components/user/search";
 import Jobtype from "@/components/user/jobtype";
 import SalaryRange from "@/components/user/salary";
 import LocationFilter from "@/components/user/location";
 import Latestopening from "@/components/user/latestopening";
+import { useState } from "react";
 
 export default function Page() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <section className="relative min-h-screen bg-linear-to-br from-[#020617] via-deep to-midnight">
       <div className="relative flex min-h-[70vh] items-center justify-center px-4">
@@ -22,7 +27,7 @@ export default function Page() {
             Join the best teams at world-class companies. Verified listings
             only.
           </p>
-          <SearchBar />
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </div>
       </div>
       <div className="relative mx-auto w-full max-w-6xl px-4">
@@ -33,7 +38,7 @@ export default function Page() {
         </div>
       </div>
       <div className="py-2">
-        <Latestopening />
+        <Latestopening searchQuery={searchQuery} />
       </div>
     </section>
   );

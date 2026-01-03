@@ -47,7 +47,29 @@ export default function Page() {
       await registerUser(registerInfo);
       router.push("/");
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Registration failed");
+      let errorMessage = "Registration failed";
+      if (error instanceof Error) {
+        // Clean up common error messages
+        if (
+          error.message.includes("already exists") ||
+          error.message.includes("duplicate")
+        ) {
+          errorMessage = "An account with this email already exists";
+        } else if (
+          error.message.includes("network") ||
+          error.message.includes("fetch")
+        ) {
+          errorMessage = "Network error. Please check your connection.";
+        } else if (
+          error.message.includes("validation") ||
+          error.message.includes("invalid")
+        ) {
+          errorMessage = "Please check your information and try again.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +158,14 @@ export default function Page() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && (
+          <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+            <p className="text-sm text-red-400 flex items-center gap-2">
+              <span>⚠️</span>
+              {error}
+            </p>
+          </div>
+        )}
 
         <button
           type="submit"

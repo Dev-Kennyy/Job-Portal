@@ -20,8 +20,16 @@ export async function loginUser(loginInfo: {
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || "Login failed");
+    let errorMessage = "Login failed";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorData.error || "Login failed";
+    } catch {
+      // If JSON parsing fails, try to get text
+      const errorText = await response.text();
+      errorMessage = errorText || "Login failed";
+    }
+    throw new Error(errorMessage);
   }
 
   // ✅ READ RESPONSE ONCE
@@ -57,8 +65,17 @@ export async function registerUser(registerInfo: {
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || "Registration failed");
+    let errorMessage = "Registration failed";
+    try {
+      const errorData = await response.json();
+      errorMessage =
+        errorData.message || errorData.error || "Registration failed";
+    } catch {
+      // If JSON parsing fails, try to get text
+      const errorText = await response.text();
+      errorMessage = errorText || "Registration failed";
+    }
+    throw new Error(errorMessage);
   }
   if (response.ok) {
     console.log("Registered successful");
@@ -85,4 +102,10 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   } catch (error) {
     return null;
   }
+}
+
+// ================= LOGOUT =================
+export function logoutUser() {
+  sessionStorage.removeItem("accessToken");
+  // Optionally, you can redirect or perform other cleanup here
 }
