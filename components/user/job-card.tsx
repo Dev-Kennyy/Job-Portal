@@ -55,7 +55,7 @@ export default function JobCard({ job, hasApplied = false }: JobCardProps) {
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            {hasApplied ? "Applied ✓" : "Apply"}
+            {hasApplied ? "Already Applied" : "Apply"}
           </button>
         </div>
       </div>

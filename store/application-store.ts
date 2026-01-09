@@ -1,10 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getAppliedJobs } from "@/services/jobs";
 
 interface ApplicationState {
   appliedJobs: Set<string>;
   addAppliedJob: (jobId: string) => void;
   hasApplied: (jobId: string) => boolean;
+  clearAppliedJobs: () => void;
+  loadAppliedJobs: () => Promise<void>;
 }
 
 type PersistedState = {
@@ -21,7 +24,24 @@ export const useApplicationStore = create<ApplicationState>()(
           appliedJobs: new Set(state.appliedJobs).add(jobId),
         })),
 
-      hasApplied: (jobId: string) => get().appliedJobs.has(jobId),
+      hasApplied: (jobId: string) => {
+        const token =
+          typeof window !== "undefined"
+            ? sessionStorage.getItem("accessToken")
+            : null;
+        return token ? get().appliedJobs.has(jobId) : false;
+      },
+
+      clearAppliedJobs: () => set({ appliedJobs: new Set<string>() }),
+
+      loadAppliedJobs: async () => {
+        try {
+          const data = await getAppliedJobs();
+          set({ appliedJobs: new Set(data.appliedJobs || []) });
+        } catch (error) {
+          console.error("Failed to load applied jobs:", error);
+        }
+      },
     }),
     {
       name: "application-storage",

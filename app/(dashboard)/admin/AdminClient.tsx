@@ -37,7 +37,7 @@ export default function AdminClient() {
       <EditSalaryModal onJobUpdated={handleJobPosted} />
 
       <div className="mb-20">
-        <AdminOverview />
+        <AdminOverview refreshKey={refreshKey} />
       </div>
 
       <div className="py-5">

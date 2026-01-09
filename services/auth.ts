@@ -107,5 +107,8 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 // ================= LOGOUT =================
 export function logoutUser() {
   sessionStorage.removeItem("accessToken");
-  // Optionally, you can redirect or perform other cleanup here
+  // Clear applied jobs on logout
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("application-storage");
+  }
 }

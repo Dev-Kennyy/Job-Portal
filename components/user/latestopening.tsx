@@ -1,42 +1,73 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
 import { getAllJobs } from "@/services/jobs";
+import { Job } from "@/lib/jobs";
+import { useApplicationStore } from "@/store/application-store";
+
 import JobCard from "./job-card";
 import JobCardSkeleton from "./JobCardSkeleton";
-import Link from "next/link";
-import { Job } from "@/lib/jobs";
-import { useEffect, useState } from "react";
-import { useApplicationStore } from "@/store/application-store";
 
 interface LatestopeningProps {
   searchQuery: string;
 }
 
+const DEFAULT_VISIBLE_COUNT = 5;
+
 export default function Latestopening({ searchQuery }: LatestopeningProps) {
   const [allJobs, setAllJobs] = useState<Job[]>([]);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE_COUNT);
   const [loading, setLoading] = useState(true);
 
-  const { hasApplied } = useApplicationStore();
+  const { hasApplied, loadAppliedJobs } = useApplicationStore();
 
+  /* ---------------- Load applied jobs ---------------- */
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("accessToken")
+        : null;
+
+    if (token) {
+      loadAppliedJobs();
+    }
+  }, [loadAppliedJobs]);
+
+  /* ---------------- Fetch all jobs ---------------- */
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const data = await getAllJobs();
-        setAllJobs(data.data);
+        setLoading(true);
+
+        const response = await getAllJobs();
+
+        /**
+         * ✅ SAFETY CHECK
+         * Adjust based on how your API responds
+         */
+        const jobs: Job[] = Array.isArray(response)
+          ? response
+          : Array.isArray(response?.data)
+          ? response.data
+          : Array.isArray(response?.jobs)
+          ? response.jobs
+          : [];
+
+        setAllJobs(jobs);
       } catch (error) {
         console.error("Failed to fetch jobs:", error);
+        setAllJobs([]);
       } finally {
         setLoading(false);
       }
     };
+
     fetchJobs();
   }, []);
 
-  useEffect(() => {
-    setVisibleCount(5); // Reset visible count when search changes
-  }, [searchQuery]);
-
+  /* ---------------- Filter jobs ---------------- */
   const filteredJobs = allJobs.filter(
     (job) =>
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -46,14 +77,21 @@ export default function Latestopening({ searchQuery }: LatestopeningProps) {
       )
   );
 
+  /* ---------------- Visible jobs (derived state) ---------------- */
+  const visibleJobs = filteredJobs.slice(
+    0,
+    searchQuery ? DEFAULT_VISIBLE_COUNT : visibleCount
+  );
+
   const handleShowMore = () => {
-    setVisibleCount((prev) => prev + 5);
+    setVisibleCount((prev) => prev + DEFAULT_VISIBLE_COUNT);
   };
 
+  /* ---------------- UI STATES ---------------- */
   if (loading) {
     return (
       <div className="p-9 flex flex-col gap-3">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: DEFAULT_VISIBLE_COUNT }).map((_, index) => (
           <JobCardSkeleton key={index} />
         ))}
       </div>
@@ -88,8 +126,7 @@ export default function Latestopening({ searchQuery }: LatestopeningProps) {
     );
   }
 
-  const visibleJobs = filteredJobs.slice(0, visibleCount);
-
+  /* ---------------- MAIN RENDER ---------------- */
   return (
     <div>
       <div className="flex justify-between px-6 py-6 items-center">
@@ -98,14 +135,16 @@ export default function Latestopening({ searchQuery }: LatestopeningProps) {
           Showing {visibleJobs.length} of {filteredJobs.length} Jobs
         </p>
       </div>
-      <div className=" p-9 flex flex-col gap-3">
-        {visibleJobs.map((job: Job) => (
+
+      <div className="p-9 flex flex-col gap-3">
+        {visibleJobs.map((job) => (
           <Link key={job._id} href={`/job/${job._id}`}>
-            <JobCard key={job._id} job={job} hasApplied={hasApplied(job._id)} />
+            <JobCard job={job} hasApplied={hasApplied(job._id)} />
           </Link>
         ))}
       </div>
-      {visibleCount < filteredJobs.length && (
+
+      {!searchQuery && visibleCount < filteredJobs.length && (
         <p
           className="text-center text-primary cursor-pointer underline"
           onClick={handleShowMore}

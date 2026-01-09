@@ -1,4 +1,5 @@
 import { Job, JobFormState } from "@/lib/jobs";
+import { authFetch } from "@/lib/authFetch";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -196,5 +197,53 @@ export async function applyJob(id: string) {
   } catch (error) {
     console.error("Apply to job error:", error);
     throw error;
+  }
+}
+
+//? Get admin statistics
+export async function getAdminStats() {
+  try {
+    if (!baseURL) {
+      throw new Error("API_BASE_URL is not defined");
+    }
+
+    const token = sessionStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${baseURL}/jobs/admin/stats`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ REQUIRED
+      },
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(err || "Failed to fetch admin stats");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Get admin stats error:", error);
+
+    return {
+      activeJobs: 0,
+      totalApplicants: 0,
+      pendingReviews: 0,
+    };
+  }
+}
+
+export async function getAppliedJobs() { 
+  try {
+    const data = await authFetch("/jobs/applied");
+    return data; // Assume it returns { appliedJobs: string[] }
+  } catch (error) {
+    console.error("getAppliedJobs error:", error);
+    return { appliedJobs: [] };
   }
 }
