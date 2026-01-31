@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { getCurrentUser } from "@/services/auth";
 import AdminClient from "./AdminClient";
-import { FaSpinner } from "react-icons/fa";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function Page() {
   const router = useRouter();
@@ -36,9 +36,11 @@ export default function Page() {
 
   if (loading || !isAuthorized) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <FaSpinner className="h-12 w-12 animate-spin text-blue-500" />
-      </div>
+      <LoadingSpinner
+        message="Checking access..."
+        minHeight="min-h-[60vh]"
+        size="lg"
+      />
     );
   }
 

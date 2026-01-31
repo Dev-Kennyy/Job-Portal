@@ -8,7 +8,7 @@ import { Job } from "@/lib/jobs";
 import { useApplicationStore } from "@/store/application-store";
 
 import JobCard from "./job-card";
-import JobCardSkeleton from "./JobCardSkeleton";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface LatestopeningProps {
   searchQuery: string;
@@ -90,11 +90,11 @@ export default function Latestopening({ searchQuery }: LatestopeningProps) {
   /* ---------------- UI STATES ---------------- */
   if (loading) {
     return (
-      <div className="p-9 flex flex-col gap-3">
-        {Array.from({ length: DEFAULT_VISIBLE_COUNT }).map((_, index) => (
-          <JobCardSkeleton key={index} />
-        ))}
-      </div>
+      <LoadingSpinner
+        message="Loading jobs..."
+        minHeight="min-h-[50vh]"
+        size="lg"
+      />
     );
   }
 

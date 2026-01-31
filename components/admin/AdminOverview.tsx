@@ -6,6 +6,7 @@ import { getAdminStats } from "@/services/jobs";
 import { BiBriefcase } from "react-icons/bi";
 import { CgLock } from "react-icons/cg";
 import { FaUserSecret } from "react-icons/fa";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface AdminStats {
   totalJobs: number;
@@ -44,9 +45,11 @@ export default function AdminOverview() {
 
   if (loading) {
     return (
-      <div className="flex h-[50vh] items-center justify-center text-white">
-        <span className="animate-spin h-6 w-6 rounded-full border-2 border-white border-t-transparent" />
-      </div>
+      <LoadingSpinner
+        message="Loading dashboard..."
+        minHeight="min-h-[50vh]"
+        size="lg"
+      />
     );
   }
 
@@ -95,7 +98,6 @@ export default function AdminOverview() {
     </section>
   );
 }
-
 
 function StatCard({
   title,

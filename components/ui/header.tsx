@@ -80,7 +80,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white font-bold">
-              ©
+              
             </div>
             <span className="text-base font-semibold text-white sm:text-lg">
               Tech Career Hub

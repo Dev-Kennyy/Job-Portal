@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllJobs } from "@/services/jobs";
 import JobCard from "./JobCard";
 import { Job } from "@/lib/jobs";
-import { FaSpinner } from "react-icons/fa";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function AllJobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -38,9 +38,11 @@ export default function AllJobs() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-white">
-        <FaSpinner className="h-8 w-8 animate-spin text-blue-500" />
-      </div>
+      <LoadingSpinner
+        message="Loading jobs..."
+        minHeight="min-h-[40vh]"
+        size="lg"
+      />
     );
   }
 

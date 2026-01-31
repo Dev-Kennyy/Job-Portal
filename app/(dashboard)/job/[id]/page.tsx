@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaSpinner } from "react-icons/fa";
 import toast from "react-hot-toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 import { getCurrentUser } from "@/services/auth";
 import { applyJob, getSingleJob } from "@/services/jobs";
@@ -97,9 +98,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   /* ---------------- UI STATES ---------------- */
   if (loading || !job) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <FaSpinner className="h-12 w-12 animate-spin text-blue-500" />
-      </div>
+      <LoadingSpinner
+        message="Loading job details..."
+        minHeight="min-h-[60vh]"
+        size="lg"
+      />
     );
   }
 
